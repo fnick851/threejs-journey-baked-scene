@@ -1,10 +1,5 @@
-import {
-  OrbitControls,
-  shaderMaterial,
-  useGLTF,
-  useTexture,
-} from "@react-three/drei"
-import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber"
+import { OrbitControls, useGLTF, useTexture } from "@react-three/drei"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import React, { Suspense, useEffect, useRef } from "react"
 import "./Scene.css"
 import firefliesVertexShader from "../shaders/fireflies/vertex.glsl"
@@ -15,15 +10,11 @@ import { Leva, useControls } from "leva"
 import {
   AdditiveBlending,
   BufferAttribute,
-  BufferGeometry,
   Color,
-  Mesh,
   MeshBasicMaterial,
   ShaderMaterial,
   sRGBEncoding,
-  TextureLoader,
 } from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
 const PortalOnField = () => {
   // Leva controls
@@ -85,7 +76,7 @@ const PortalOnField = () => {
   // firefly geometry
   const bufferGeometryRef = useRef(null)
   useEffect(() => {
-    const geometry = (bufferGeometryRef.current as unknown) as BufferGeometry
+    const geometry = bufferGeometryRef.current
     if (geometry) {
       geometry.setAttribute("position", new BufferAttribute(positionArray, 3))
       geometry.setAttribute("aScale", new BufferAttribute(scaleArray, 1))
@@ -93,18 +84,16 @@ const PortalOnField = () => {
   })
 
   const glb = useGLTF("portal.glb")
-  const bakedMesh = glb.scene.children.find(
-    (child) => child.name === "baked"
-  ) as Mesh
+  const bakedMesh = glb.scene.children.find((child) => child.name === "baked")
   const portalLightMesh = glb.scene.children.find(
     (child) => child.name === "portalLight"
-  ) as Mesh
+  )
   const poleLightAMesh = glb.scene.children.find(
     (child) => child.name === "poleLightA"
-  ) as Mesh
+  )
   const poleLightBMesh = glb.scene.children.find(
     (child) => child.name === "poleLightB"
-  ) as Mesh
+  )
   bakedMesh.material = bakedMaterial
   portalLightMesh.material = portalLightMaterial
   poleLightAMesh.material = poleLightMaterial
